@@ -1,0 +1,11 @@
+[build]
+builder = "dockerfile"
+dockerfile = "Dockerfile.server"
+
+[deploy]
+startCommand = "npm start"
+restartPolicyMaxRetries = 5
+
+[[services]]
+name = "backend"
+rootDirectory = "server"
