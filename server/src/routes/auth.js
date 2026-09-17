@@ -25,7 +25,7 @@ router.post('/register', async (req, res) => {
     }
 
     // Check if user exists
-    const { data: existingUser } = await supabase
+    const { data: existingUser } = await supabaseAdmin
       .from('users')
       .select('id')
       .eq('email', email)
@@ -39,7 +39,7 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const { data: user, error } = await supabase
+    const { data: user, error } = await supabaseAdmin
       .from('users')
       .insert([
         {
@@ -85,7 +85,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Get user
-    const { data: user, error } = await supabase
+    const { data: user, error } = await supabaseAdmin
       .from('users')
       .select('*')
       .eq('email', email)
