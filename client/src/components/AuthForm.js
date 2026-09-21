@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import api from '@/lib/api';
+import { useAuth } from '@/context/AuthContext';
 
 export default function AuthForm({ mode = 'login', role = 'customer' }) {
   const router = useRouter();
+  const { login } = useAuth();
   const isRegister = mode === 'register';
   const [form, setForm] = useState({ fullName: '', email: '', phone: '', password: '' });
   const [error, setError] = useState('');
@@ -20,8 +22,7 @@ export default function AuthForm({ mode = 'login', role = 'customer' }) {
     setLoading(true);
     try {
       const response = await api.post(isRegister ? '/auth/register' : '/auth/login', isRegister ? { ...form, role } : form);
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(response.user));
+      login(response.user, response.token);
       router.push('/');
     } catch (err) {
       setError(err?.error || err?.message || 'حدث خطأ، يرجى المحاولة مرة أخرى');
